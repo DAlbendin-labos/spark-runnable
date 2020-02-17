@@ -14,14 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+ARG java_image_tag=8-jre-slim
 
-FROM openjdk:8-jdk-slim
+FROM openjdk:${java_image_tag}
 
-ARG spark_jars=jars
-ARG k8s_tests=kubernetes/tests
-
-
-SHELL ["/bin/bash","-o","pipefail","-c"]
+ARG spark_uid=185
 
 # Before building the docker image, first build and make a Spark distribution following
 # the instructions in http://spark.apache.org/docs/latest/building-spark.html.
@@ -32,25 +29,35 @@ SHELL ["/bin/bash","-o","pipefail","-c"]
 
 RUN set -ex && \
     apt-get update && \
-    apt install -y bash && \
     ln -s /lib /lib64 && \
+    apt install -y bash tini libc6 libpam-modules krb5-user libnss3 procps && \
     mkdir -p /opt/spark && \
+    mkdir -p /opt/spark/examples && \
     mkdir -p /opt/spark/work-dir && \
     touch /opt/spark/RELEASE && \
     rm /bin/sh && \
     ln -sv /bin/bash /bin/sh && \
-    rm -rf /var/cache/apt/* && \
-    rm -rf jars/kubernetes-client*
+    echo "auth required pam_wheel.so use_uid" >> /etc/pam.d/su && \
+    chgrp root /etc/passwd && chmod ug+rw /etc/passwd && \
+    rm -rf /var/cache/apt/*
 
-COPY ${spark_jars} /opt/spark/jars
+COPY jars /opt/spark/jars
 COPY bin /opt/spark/bin
 COPY sbin /opt/spark/sbin
-COPY entrypoint.sh /opt/
-
-ADD https://repo1.maven.org/maven2/io/fabric8/kubernetes-client/4.4.2/kubernetes-client-4.4.2.jar /opt/spark/jars
+COPY kubernetes/dockerfiles/spark/entrypoint.sh /opt/
+COPY kubernetes/dockerfiles/spark/decom.sh /opt/
+COPY examples /opt/spark/examples
+COPY kubernetes/tests /opt/spark/tests
+COPY data /opt/spark/data
 
 ENV SPARK_HOME /opt/spark
 
 WORKDIR /opt/spark/work-dir
+RUN chmod g+w /opt/spark/work-dir
+RUN chmod a+x /opt/decom.sh
 
-ENTRYPOINT [ "/opt/entrypoint.sh"]
+ENTRYPOINT [ "/opt/entrypoint.sh" ]
+
+# Specify the User that the actual main process will run as
+USER ${spark_uid}
+
