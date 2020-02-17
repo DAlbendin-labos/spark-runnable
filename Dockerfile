@@ -29,10 +29,13 @@ ARG k8s_tests=kubernetes/tests
 
 RUN set -ex && \
     apt-get update && \
+    apt install -y bash && \
     ln -s /lib /lib64 && \
     mkdir -p /opt/spark && \
     mkdir -p /opt/spark/work-dir && \
     touch /opt/spark/RELEASE && \
+    rm /bin/sh && \
+    ln -sv /bin/bash /bin/sh && \
     rm -rf /var/cache/apt/* && \
     rm -rf jars/kubernetes-client*
 
