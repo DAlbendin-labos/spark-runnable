@@ -37,19 +37,18 @@ RUN set -ex && \
     touch /opt/spark/RELEASE && \
     rm /bin/sh && \
     ln -sv /bin/bash /bin/sh && \
-    echo "auth required pam_wheel.so use_uid" >> /etc/pam.d/su && \
-    chgrp root /etc/passwd && chmod ug+rw /etc/passwd && \
-    rm -rf /var/cache/apt/*
+    rm -rf /var/cache/apt/* && \
+    rm -rf jars/kubernetes-client*
 
 COPY ${spark_jars} /opt/spark/jars
 COPY bin /opt/spark/bin
 COPY sbin /opt/spark/sbin
-COPY ${img_path}/spark/entrypoint.sh /opt/
-COPY examples /opt/spark/examples
-COPY ${k8s_tests} /opt/spark/tests
+COPY entrypoint.sh /opt/
 COPY data /opt/spark/data
 
 ENV SPARK_HOME /opt/spark
+
+ADD https://repo1.maven.org/maven2/io/fabric8/kubernetes-client/4.4.2/kubernetes-client-4.4.2.jar /opt/spark/jars
 
 WORKDIR /opt/spark/work-dir
 
