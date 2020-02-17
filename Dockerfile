@@ -31,12 +31,9 @@ ARG k8s_tests=kubernetes/tests
 RUN set -ex && \
     apt-get update && \
     ln -s /lib /lib64 && \
-#    apt install -y bash tini libc6 libpam-modules libnss3 && \
     mkdir -p /opt/spark && \
     mkdir -p /opt/spark/work-dir && \
     touch /opt/spark/RELEASE && \
-#    rm /bin/sh && \
-#    ln -sv /bin/bash /bin/sh && \
     rm -rf /var/cache/apt/* && \
     rm -rf jars/kubernetes-client*
 
@@ -44,7 +41,6 @@ COPY ${spark_jars} /opt/spark/jars
 COPY bin /opt/spark/bin
 COPY sbin /opt/spark/sbin
 COPY entrypoint.sh /opt/
-COPY data /opt/spark/data
 
 ENV SPARK_HOME /opt/spark
 
