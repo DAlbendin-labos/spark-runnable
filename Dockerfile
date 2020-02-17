@@ -18,7 +18,6 @@
 FROM openjdk:8-jdk-slim
 
 ARG spark_jars=jars
-ARG img_path=kubernetes/dockerfiles
 ARG k8s_tests=kubernetes/tests
 
 # Before building the docker image, first build and make a Spark distribution following
@@ -43,7 +42,7 @@ RUN set -ex && \
 COPY ${spark_jars} /opt/spark/jars
 COPY bin /opt/spark/bin
 COPY sbin /opt/spark/sbin
-COPY ${img_path}/spark/entrypoint.sh /opt/
+COPY entrypoint.sh /opt/
 
 ADD https://repo1.maven.org/maven2/io/fabric8/kubernetes-client/4.4.2/kubernetes-client-4.4.2.jar /opt/spark/jars
 
