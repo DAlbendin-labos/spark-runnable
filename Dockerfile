@@ -20,6 +20,9 @@ FROM openjdk:8-jdk-slim
 ARG spark_jars=jars
 ARG k8s_tests=kubernetes/tests
 
+
+SHELL ["/bin/bash","-o","pipefail","-c"]
+
 # Before building the docker image, first build and make a Spark distribution following
 # the instructions in http://spark.apache.org/docs/latest/building-spark.html.
 # If this docker file is being used in the context of building your images from a Spark
