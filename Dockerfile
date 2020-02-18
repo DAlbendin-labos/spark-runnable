@@ -32,10 +32,15 @@ RUN groupadd --gid 1000 spkk8s && useradd -g spkk8s --uid 1000 spkk8s && \
     set -ex && \
     apt-get update && \
     ln -s /lib /lib64 && \
+    apt install -y bash tini libc6 libpam-modules libnss3 && \
     mkdir -p /opt/spark && \
     mkdir -p /opt/spark/work-dir && \
     touch /opt/spark/RELEASE && \
-    rm -rf /var/cache/apt/* && \
+    rm /bin/sh && \
+    ln -sv /bin/bash /bin/sh && \
+    echo "auth required pam_wheel.so use_uid" >> /etc/pam.d/su && \
+    chgrp root /etc/passwd && chmod ug+rw /etc/passwd && \
+    rm -rf /var/cache/apt/*
     rm -rf jars/kubernetes-client*
 
 COPY ${spark_jars} /opt/spark/jars
