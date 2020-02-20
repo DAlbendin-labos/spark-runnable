@@ -40,7 +40,7 @@ RUN groupadd --gid 1000 spkk8s && useradd -g spkk8s --uid 1000 spkk8s && \
     ln -sv /bin/bash /bin/sh && \
     echo "auth required pam_wheel.so use_uid" >> /etc/pam.d/su && \
     chgrp root /etc/passwd && chmod ug+rw /etc/passwd && \
-    rm -rf /var/cache/apt/*
+    rm -rf /var/cache/apt/* && \
     rm -rf jars/kubernetes-client*
 
 COPY ${spark_jars} /opt/spark/jars
