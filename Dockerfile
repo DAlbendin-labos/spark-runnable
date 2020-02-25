@@ -54,4 +54,6 @@ ADD https://repo1.maven.org/maven2/io/fabric8/kubernetes-client/4.4.2/kubernetes
 
 WORKDIR /opt/spark/work-dir
 
+USER 1000
+
 ENTRYPOINT [ "/opt/entrypoint.sh" ]
