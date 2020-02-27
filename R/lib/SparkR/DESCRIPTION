@@ -1,6 +1,6 @@
 Package: SparkR
 Type: Package
-Version: 2.4.4
+Version: 2.4.5
 Title: R Front End for 'Apache Spark'
 Description: Provides an R Front end for 'Apache Spark' <https://spark.apache.org>.
 Authors@R: c(person("Shivaram", "Venkataraman", role = c("aut", "cre"),
@@ -24,7 +24,7 @@ Collate: 'schema.R' 'generics.R' 'jobj.R' 'column.R' 'group.R' 'RDD.R'
         'mllib_recommendation.R' 'mllib_regression.R' 'mllib_stat.R'
         'mllib_tree.R' 'mllib_utils.R' 'serialize.R' 'sparkR.R'
         'stats.R' 'streaming.R' 'types.R' 'utils.R' 'window.R'
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
 VignetteBuilder: knitr
 NeedsCompilation: no
 Author: Shivaram Venkataraman [aut, cre],
@@ -32,4 +32,4 @@ Author: Shivaram Venkataraman [aut, cre],
   Felix Cheung [aut],
   The Apache Software Foundation [aut, cph]
 Maintainer: Shivaram Venkataraman <shivaram@cs.berkeley.edu>
-Built: R 3.4.4; ; 2019-08-27 21:22:20 UTC; unix
+Built: R 3.4.4; ; 2020-02-02 19:38:51 UTC; unix

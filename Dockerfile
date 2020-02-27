@@ -28,8 +28,7 @@ ARG k8s_tests=kubernetes/tests
 # of the Spark distribution. E.g.:
 # docker build -t spark:latest -f kubernetes/dockerfiles/spark/Dockerfile .
 
-RUN groupadd --gid 1000 spkk8s && useradd -g spkk8s --uid 1000 spkk8s && \
-    set -ex && \
+RUN set -ex && \
     apt-get update && \
     ln -s /lib /lib64 && \
     apt install -y bash tini libc6 libpam-modules libnss3 && \
@@ -40,20 +39,18 @@ RUN groupadd --gid 1000 spkk8s && useradd -g spkk8s --uid 1000 spkk8s && \
     ln -sv /bin/bash /bin/sh && \
     echo "auth required pam_wheel.so use_uid" >> /etc/pam.d/su && \
     chgrp root /etc/passwd && chmod ug+rw /etc/passwd && \
-    rm -rf /var/cache/apt/* && \
-    rm -rf jars/kubernetes-client*
+    rm -rf /var/cache/apt/*
 
 COPY ${spark_jars} /opt/spark/jars
 COPY bin /opt/spark/bin
 COPY sbin /opt/spark/sbin
-COPY entrypoint.sh /opt/
+COPY ${img_path}/spark/entrypoint.sh /opt/
+COPY examples /opt/spark/examples
+COPY ${k8s_tests} /opt/spark/tests
+COPY data /opt/spark/data
 
 ENV SPARK_HOME /opt/spark
 
-ADD https://repo1.maven.org/maven2/io/fabric8/kubernetes-client/4.4.2/kubernetes-client-4.4.2.jar /opt/spark/jars
-
 WORKDIR /opt/spark/work-dir
-
-USER 1000
 
 ENTRYPOINT [ "/opt/entrypoint.sh" ]
