@@ -45,7 +45,9 @@ RUN set -ex && \
 COPY ${spark_jars} /opt/spark/jars
 COPY bin /opt/spark/bin
 COPY sbin /opt/spark/sbin
-COPY entrypoint.sh /opt/
+COPY ${img_path}/spark/entrypoint.sh /opt/
+COPY examples /opt/spark/examples
+
 
 ENV SPARK_HOME /opt/spark
 
