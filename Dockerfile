@@ -47,8 +47,7 @@ COPY bin /opt/spark/bin
 COPY sbin /opt/spark/sbin
 COPY ${img_path}/spark/entrypoint.sh /opt/
 COPY examples /opt/spark/examples
-COPY ${k8s_tests} /opt/spark/tests
-COPY data /opt/spark/data
+
 
 ENV SPARK_HOME /opt/spark
 
